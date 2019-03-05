@@ -60,8 +60,13 @@ class BlockchainListener {
     this.embark.registerAPICall(
       'get',
       '/embark-api/regular-txs',
-      (req, _res) => {
-        this.events.request(`regularTxs:${req.query.mode === 'on' ? 'start' : 'stop'}`);
+      (req, res) => {
+        this.events.request(`regularTxs:${req.query.mode === 'on' ? 'start' : 'stop'}`, (err, result) => {
+          if(err) {
+            return res.send({ error: err.message });
+          }
+          res.send(result);
+        });
       }
     );
   }
